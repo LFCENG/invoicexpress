@@ -67,7 +67,7 @@ module.exports = function ConfigureGruntService(grunt) {
     copy: {
       docs: {
         files: [{
-          src: './docs/persistiq.js.html',
+          src: './docs/invoicexress.js.html',
           dest: './docs/index.html'
         }]
       }

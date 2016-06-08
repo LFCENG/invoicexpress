@@ -1,94 +1,66 @@
 
-# persistIq
-    
-An API client in Node.JS for talking to persistIq.com. This package implements the complete API for talking with the persistIq.com API Leads -- list all leads, list a single lead, create leads and update leads 
+# invoicexpress    
 
-There complete docs can be found here - http://apidocs.persistiq.com/
+An API client in Node.JS for talking to invoicexpress.com. This package implements the complete API for talking with the invoicexpress.com API 
+
+There complete docs can be found here - https://invoicexpress.com/api/overview
 
 ## Installation
 
 To install the latest stable release with the command-line tool:
 ```sh
-npm install --save persistIq
+npm install --save invoicexpress
 ```
 
 ## Usage
 
-See [docs](http://lfceng.github.io/persistIQ/) for complete API documentation and the [PersistIq API documentation](http://apidocs.persistiq.com/).
+See [docs](http://lfceng.github.io/invoicexpress/) for complete API documentation and the [invoicexpress API documentation](https://invoicexpress.com/api/overview).
 
 ```javascript
-// installs persistiq package
-var PersistIq = require('persistiq');
+// installs pinvoicexpress package
+var InvoiceXpress = require('invoicexpress');
 
-// authenticate persistiq
-var persistIq = new PersistIq("your_API_key");
+// authenticate invoicexpress
+var invoicexpress = new InvoiceXpress("your_API_key");
 
-// set leads owner, by fecthing the user from the email. you can also send the specific user id in the createLeads call by addind a parameter 'creator_id': <id>
-persistIq.setOwner('luis@popcornmetrics.com');
+// set account by providing the account name. If it is not called we assign to the first account found in invoicexpress
+invoicexpress.setAccount('my_account_name');
 
 // Note: you can also require and create an instance in the same step if you would like.
 // Example:
-// var persistIq = require('persistIq').create("your_API_key");
+// var invoicexpress = require('invoicexpress').create("your_API_key");
 
-// To create a leads
+// To fectch all invoices
 // Every method supports promises or callbacks.
-var leads = [{
-  "email" : "luis@popcornmetrics.com",
-  "first_name" : "Luis",
-  "last_name": "Correia",
-  "company_name": "PopcornMetrics Limited",
-  "industry" : "Technology",
-  "title": "Customer Success Manager"
-  },{
-  "email" : "super_man@krypton.com",
-  "first_name" : "Clark",
-  "last_name": "Kent",
-  "company_name": "Krypton LLC",
-  "industry" : "Marvel",
-  "title": "Hero Manager"
-  }]
-var options = {}; //check persistiq documentation for more options
-
-persistIq.createLeads(leads, options, function(err, data) {
+// by default only fecthes 10 invoices
+invoicexpress.listAllInvoices(function(err, data) {
     // console.log(data);
 });
 
-// To get a lead
-// (using a promise)
-persistIq.getLead(<lead_id>).then(function(res) {
-  // res is **JSON** response
-//{
-//  "status": "success",
-//  "errors": null,
-//  "leads": [
-//    {
-//      "id": "l_1abc",
-//      "status": "replied",
-//      "data": {
-//        "email": "bob@test.co",
-//        "first_name": "bob",
-//       "company_name": "Test Inc"
-//     },
-//      "bounced": false,
-//      "optedout": false,
-//      "sent_count": 5,
-//      "replied_count": 1,
-//      "last_sent_at": "2014-07-09T15:08:44.000-07:00"
-//    }
-}, function(err) {
-  // err is an error object if there was an error
+// To fecth more invoices use
+// In the example fetches 30 invoices
+invoicexpress.listAllInvoices({per_page: 30}, function(err, data) {
+    // console.log(data);
+});
+
+// To get invoices using a query use
+// specify what you want to get in the query 
+// use invoice-id to get a specific invoice
+var query = {'invoice-id': '444'};
+//or
+var query = {'date[from]': '01/05/2016', 'date[to]': '30/05/2016'};
+invoicexpress.getInvoice(query, function (err, data) {
+   // console.log(data);
 });
 
 List of supported methods:
 ```javascript
-* persistiq.setOwner
-* persistiq.listAllLeads
-* persistiq.listLead
-* persistiq.createLeads
-* persistiq.updateLead
+* invoicexpress.setAccount
+* invoicexpress.listAllInvoices
+* invoicexpress.getInvoice
 ```
 
-See [docs](http://lfceng.github.io/persistiq/) for complete API documentation and the [persistIq API documentation](http://apidocs.persistiq.com). See tests for more examples.
+See [docs](http://lfceng.github.io/invoicexpress/) for complete API documentation and the [invoicexpress API documentation](https://invoicexpress.com/api/overview). See tests for more examples.
 
 __Note__: Every method returns a promise but accepts callbacks too.
 
@@ -96,7 +68,7 @@ __Note__: Every method returns a promise but accepts callbacks too.
 
 (The MIT License)
 
-Copyright (c) 2015 Luis Correia &lt;luiscorreia.ist@gmail.com&gt;
+Copyright (c) 2016 Luis Correia &lt;luiscorreia.ist@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
